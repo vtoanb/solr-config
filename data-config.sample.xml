@@ -1,0 +1,30 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/VeNShop_production" 
+              user="root" 
+              password="123456"/>
+  <document>
+    <entity name="product"  
+      pk="id"
+      query="
+        SELECT
+        products.id,
+        products.name as pname,
+        products.description,
+        GROUP_CONCAT(DISTINCT(category_products.category_id)) as cat_id
+        FROM products LEFT JOIN
+        category_products
+        ON category_products.product_id = products.id
+        GROUP BY(products.id)"
+      deltaImportQuery="SELECT * from products WHERE id='${dih.delta.id}'"
+      deltaQuery="SELECT * FROM products  WHERE updated_at > '${dih.last_index_time}'"
+      >
+      <field column="id" name="id"/>
+      <field column="pname" name="pname"/>
+      <field column="description" name="description"/>
+      <field column="cat_id" name="cat_id"/>
+    </entity>
+  </document>
+</dataConfig>
+
