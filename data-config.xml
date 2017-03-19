@@ -10,9 +10,9 @@
       query="
         SELECT
         products.id,
-        products.name as pname,
+        products.name AS pname,
         products.description,
-        GROUP_CONCAT(DISTINCT(category_products.category_id)) as cat_id
+        GROUP_CONCAT(DISTINCT(category_products.category_id)) AS cat_id
         FROM products LEFT JOIN
         category_products
         ON category_products.product_id = products.id
